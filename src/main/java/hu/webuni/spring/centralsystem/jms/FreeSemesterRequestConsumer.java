@@ -21,8 +21,12 @@ public class FreeSemesterRequestConsumer {
     //ez egy fogadas es kuldes metodus:
     @JmsListener(destination = "free_semester_requests") // bejovo request fogadasa, erre figyel (ez queue lesz, nem topic), ez a bejovo parameter
     public void onFreeSemesterRequest(Message<FreeSemesterRequest> message) { //FreeSemesterRequest message helyett, de nekunk a ReplyTo fejlec fog szerepelni, abban szerepel, hova kell a valaszt kuldeni (nem csak a torzse erdekel a message-nek, hanem a fejlece is, igy nem a payload-ot veszem fel fel bejovo argumentumkent, hanem bewrappelem egy springframework-os message-be)
-        int studentId = message.getPayload().getStudentId(); // a payload a FreeSemesterRequest, ebbol az id kell
+        int studentId = message.getPayload().getStudentId(); // a payload a FreeSemesterRequest, ebbol az id kell, valojaban centralId/eduId es nem sima id
+
+        System.out.println("Now CentralSystem is called by JMS message !");
+
         int freeSemesters = centralsystemXmlWs.getFreeSemesterByCentralId(studentId); //uzleti logika hivas, mennyi a freeSemester
+        System.out.println("This is the freesemester given by CentralSystem called by JMS message: " + freeSemesters);
 
         //valasz eloallitasa:
         FreeSemesterResponse freeSemesterResponse = new FreeSemesterResponse();
