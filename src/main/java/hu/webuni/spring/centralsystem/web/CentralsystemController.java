@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class CentralsystemController {
 
         Random random = new Random();
 
-        System.out.println("getFreeSemesterByCentralId within CentralSystem called");
+        System.out.println("getFreeSemesterByCentralId within CentralSystem called at " + LocalDateTime.now());
 
 
         try {
