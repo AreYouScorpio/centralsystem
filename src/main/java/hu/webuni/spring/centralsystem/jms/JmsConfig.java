@@ -1,12 +1,14 @@
-package hu.webuni.spring.centralsystem.config;
+package hu.webuni.spring.centralsystem.jms;
 
 
+import jakarta.jms.ConnectionFactory;
 import org.apache.activemq.artemis.api.core.TransportConfiguration;
 import org.apache.activemq.artemis.core.remoting.impl.netty.NettyAcceptorFactory;
 import org.apache.activemq.artemis.core.remoting.impl.netty.NettyConnectorFactory;
 import org.springframework.boot.autoconfigure.jms.artemis.ArtemisConfigurationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
@@ -22,6 +24,7 @@ public class JmsConfig {
         return converter;
     }
 
+    /*
     @Configuration
     public class ArtemisConfig implements ArtemisConfigurationCustomizer {
         @Override
@@ -32,4 +35,13 @@ public class JmsConfig {
         }
     }
 
+     */
+    @Bean //jmsTemplate amivel kuldonk uzenetet, programozottan konfigoljuk fel
+    public JmsTemplate jmsTemplate(ObjectMapper objectMapper, ConnectionFactory connectionFactory) {
+        JmsTemplate jmsTemplate = new JmsTemplate();
+        jmsTemplate.setConnectionFactory(connectionFactory);
+        jmsTemplate.setMessageConverter(jacksonJmsMessageConverter(objectMapper));
+        jmsTemplate.setPubSubDomain(true); // topicba menjen az uzenet
+        return jmsTemplate;
+    }
 }
